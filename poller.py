@@ -5,13 +5,13 @@ import json
 import os
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
 
 from pco_client import PCOClient
-from scheduler import VolunteerScheduler, SchedulingNeed
+from scheduler import VolunteerScheduler, SchedulingNeed, normalize_status
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "config.env"))
 
@@ -55,10 +55,26 @@ def load_pending() -> list[dict]:
 
 
 def save_pending(pending: list[dict]):
+    # Prune entries older than 30 days that are no longer pending
+    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    pruned = []
+    for item in pending:
+        if item.get("status") == "pending_approval":
+            pruned.append(item)  # Always keep pending items
+        elif item.get("timestamp"):
+            try:
+                ts = datetime.fromisoformat(item["timestamp"])
+                if ts > cutoff:
+                    pruned.append(item)  # Keep recent completed/errored
+            except ValueError:
+                pruned.append(item)
+        else:
+            pruned.append(item)
+
     DATA_DIR.mkdir(exist_ok=True)
     tmp = str(PENDING_FILE) + ".tmp"
     with open(tmp, "w") as f:
-        json.dump(pending, f, indent=2)
+        json.dump(pruned, f, indent=2)
     os.rename(tmp, str(PENDING_FILE))
 
 
@@ -90,7 +106,7 @@ def poll_for_declines():
                 attrs = tm["attributes"]
                 status = attrs.get("status", "")
 
-                if status not in ("D", "declined", "Declined"):
+                if normalize_status(status) != "declined":
                     continue
 
                 person_name = attrs.get("name", "Unknown")
@@ -231,16 +247,11 @@ def generate_summary():
     lines = [f"PCO Scheduling — {datetime.now().strftime('%b %d')}"]
     lines.append("")
 
-    total_unfilled = 0
-    total_pending = 0
-
     for plan in status.get("upcoming_plans", []):
         needed = plan.get("needed", 0)
         pending = plan.get("pending", 0)
         confirmed = plan.get("confirmed", 0)
         declined = plan.get("declined", 0)
-        total_unfilled += needed
-        total_pending += pending
 
         status_parts = []
         if needed:

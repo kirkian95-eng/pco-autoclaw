@@ -5,7 +5,7 @@ import json
 import os
 import subprocess
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -19,6 +19,18 @@ DATA_DIR = Path(__file__).parent / "data"
 LOG_FILE = DATA_DIR / "schedule_log.jsonl"
 STATUS_FILE = Path("/tmp/pco-scheduler-status.json")
 SEND_TELEGRAM = Path(os.path.expanduser("~/.local/bin/send-telegram.sh"))
+
+
+def normalize_status(raw: str) -> str:
+    """Normalize PCO status strings to a consistent lowercase form."""
+    s = raw.strip().lower()
+    if s in ("c", "confirmed"):
+        return "confirmed"
+    if s in ("d", "declined"):
+        return "declined"
+    if s in ("u", "unconfirmed", "pending"):
+        return "pending"
+    return s
 
 
 @dataclass
@@ -58,13 +70,12 @@ class VolunteerScheduler:
     def scan_upcoming_needs(self) -> list[SchedulingNeed]:
         """Find all unfilled positions across configured service types."""
         needs = []
+        # Fetch service types once, not per iteration
+        all_service_types = self.client.get_service_types()
+        st_name_map = {st["id"]: st["attributes"]["name"] for st in all_service_types}
+
         for st_id in self.service_type_ids:
-            # Get service type name
-            service_types = self.client.get_service_types()
-            st_name = next(
-                (st["attributes"]["name"] for st in service_types if st["id"] == st_id),
-                f"ServiceType#{st_id}",
-            )
+            st_name = st_name_map.get(st_id, f"ServiceType#{st_id}")
 
             plans = self.client.get_upcoming_plans(st_id, self.advance_days)
             for plan in plans:
@@ -94,18 +105,25 @@ class VolunteerScheduler:
                     ))
         return needs
 
-    def build_eligibility_list(self, need: SchedulingNeed) -> list[Candidate]:
-        """Build a ranked list of eligible candidates for a position."""
+    def build_eligibility_list(
+        self, need: SchedulingNeed, existing_members: list[dict] = None
+    ) -> tuple[list["Candidate"], set[str]]:
+        """Build a ranked list of eligible candidates for a position.
+
+        Returns (candidates, existing_person_ids) so callers can reuse
+        the existing member data without re-fetching.
+        """
         if not need.team_id:
-            return []
+            return [], set()
 
         # Get team roster
         roster = self.client.get_team_members(need.service_type_id, need.team_id)
 
-        # Get who's already on this plan
-        existing = self.client.get_plan_team_members(need.service_type_id, need.plan_id)
+        # Get who's already on this plan (reuse if provided)
+        if existing_members is None:
+            existing_members = self.client.get_plan_team_members(need.service_type_id, need.plan_id)
         existing_person_ids = set()
-        for tm in existing:
+        for tm in existing_members:
             rels = tm.get("relationships", {})
             person_data = rels.get("person", {}).get("data", {})
             if person_data.get("id"):
@@ -155,7 +173,7 @@ class VolunteerScheduler:
 
         # Sort by longest wait first
         candidates.sort(key=lambda c: -c.days_since)
-        return candidates
+        return candidates, existing_person_ids
 
     def _is_blocked_out(self, blockouts: list[dict], plan_date: str) -> bool:
         """Check if any blockout overlaps with the plan date."""
@@ -190,7 +208,7 @@ class VolunteerScheduler:
             for sched in schedules:
                 attrs = sched.get("attributes", {})
                 status = attrs.get("status", "")
-                if status in ("C", "confirmed", "Confirmed"):
+                if normalize_status(status) == "confirmed":
                     plan_date = attrs.get("sort_date", attrs.get("created_at", ""))
                     if plan_date and (latest is None or plan_date > latest):
                         latest = plan_date
@@ -205,7 +223,11 @@ class VolunteerScheduler:
             return "unknown", 500
 
     def schedule_candidate(
-        self, need: SchedulingNeed, candidate: Candidate, dry_run: bool = False
+        self,
+        need: SchedulingNeed,
+        candidate: Candidate,
+        dry_run: bool = False,
+        existing_person_ids: set[str] = None,
     ) -> dict:
         """Schedule a candidate for a position."""
         action = {
@@ -229,8 +251,8 @@ class VolunteerScheduler:
                   f"on {need.plan_date} (last served: {candidate.last_served}, "
                   f"{candidate.days_since} days ago)")
         else:
-            # Check idempotency
-            if self._already_scheduled(need, candidate):
+            # Check idempotency using pre-fetched data when available
+            if existing_person_ids and candidate.person_id in existing_person_ids:
                 action["result"] = "already_scheduled"
                 print(f"  [SKIP] {candidate.name} already scheduled for this position")
                 return action
@@ -258,10 +280,13 @@ class VolunteerScheduler:
         self._log_action(action)
         return action
 
-    def fill_all_needs(self, dry_run: bool = False) -> list[dict]:
+    def fill_all_needs(self, dry_run: bool = False, plan_id: str = None) -> list[dict]:
         """Main entry point: scan all needs and schedule candidates."""
         print(f"Scanning for unfilled positions (next {self.advance_days} days)...")
         needs = self.scan_upcoming_needs()
+
+        if plan_id:
+            needs = [n for n in needs if n.plan_id == plan_id]
 
         if not needs:
             print("No unfilled positions found.")
@@ -270,9 +295,21 @@ class VolunteerScheduler:
         print(f"Found {len(needs)} unfilled position(s).\n")
         results = []
 
+        # Cache plan team members per plan to avoid re-fetching
+        plan_members_cache: dict[str, list[dict]] = {}
+
         for need in needs:
             print(f"{need.plan_date} — {need.service_type_name} — {need.position_name}:")
-            candidates = self.build_eligibility_list(need)
+
+            cache_key = f"{need.service_type_id}:{need.plan_id}"
+            if cache_key not in plan_members_cache:
+                plan_members_cache[cache_key] = self.client.get_plan_team_members(
+                    need.service_type_id, need.plan_id
+                )
+
+            candidates, existing_ids = self.build_eligibility_list(
+                need, existing_members=plan_members_cache[cache_key]
+            )
 
             if not candidates:
                 msg = f"  [NO CANDIDATES] No eligible volunteers for {need.position_name}"
@@ -295,7 +332,9 @@ class VolunteerScheduler:
                     print(f"    {i}. {c.name} — last served: {c.last_served} ({c.days_since}d ago)")
 
             best = candidates[0]
-            result = self.schedule_candidate(need, best, dry_run=dry_run)
+            result = self.schedule_candidate(
+                need, best, dry_run=dry_run, existing_person_ids=existing_ids
+            )
             results.append(result)
 
         return results
@@ -320,11 +359,11 @@ class VolunteerScheduler:
                 team_members = self.client.get_plan_team_members(st_id, plan_id)
 
                 pending = [tm for tm in team_members
-                           if tm["attributes"].get("status") in ("U", "unconfirmed", "Pending")]
+                           if normalize_status(tm["attributes"].get("status", "")) == "pending"]
                 confirmed = [tm for tm in team_members
-                             if tm["attributes"].get("status") in ("C", "confirmed", "Confirmed")]
+                             if normalize_status(tm["attributes"].get("status", "")) == "confirmed"]
                 declined = [tm for tm in team_members
-                            if tm["attributes"].get("status") in ("D", "declined", "Declined")]
+                            if normalize_status(tm["attributes"].get("status", "")) == "declined"]
 
                 status["upcoming_plans"].append({
                     "plan_id": plan_id,
@@ -342,16 +381,6 @@ class VolunteerScheduler:
         with open(tmp, "w") as f:
             json.dump(status, f, indent=2)
         os.rename(tmp, str(STATUS_FILE))
-
-    def _already_scheduled(self, need: SchedulingNeed, candidate: Candidate) -> bool:
-        """Check if this person is already on the plan."""
-        existing = self.client.get_plan_team_members(need.service_type_id, need.plan_id)
-        for tm in existing:
-            rels = tm.get("relationships", {})
-            person_data = rels.get("person", {}).get("data", {})
-            if person_data.get("id") == candidate.person_id:
-                return True
-        return False
 
     def _log_action(self, action: dict):
         """Append to schedule log."""
@@ -390,7 +419,7 @@ if __name__ == "__main__":
             status = json.load(f)
         print(json.dumps(status, indent=2))
     else:
-        results = scheduler.fill_all_needs(dry_run=args.dry_run)
+        results = scheduler.fill_all_needs(dry_run=args.dry_run, plan_id=args.plan)
         if not args.dry_run:
             scheduler.write_status()
         print(f"\nDone. {len(results)} action(s) taken.")

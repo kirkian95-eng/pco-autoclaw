@@ -40,6 +40,8 @@ class PCOClient:
                 plan_dt = datetime.fromisoformat(sort_date.replace("Z", "+00:00"))
                 if plan_dt <= cutoff:
                     results.append(plan)
+                else:
+                    break  # Future plans are sorted by date; stop once past cutoff
         return results
 
     def get_plan_times(self, service_type_id: str, plan_id: str) -> list[dict]:
@@ -103,11 +105,22 @@ class PCOClient:
     # ── Schedule History ───────────────────────────────────────
 
     def get_person_schedules(self, person_id: str, months_back: int = 6) -> list[dict]:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=months_back * 30)
         results = []
         for item in self.pco.iterate(
             f"/services/v2/people/{person_id}/plan_people"
         ):
-            results.append(item["data"])
+            record = item["data"]
+            # Filter to recent schedules only
+            sort_date = record.get("attributes", {}).get("sort_date", "")
+            if sort_date:
+                try:
+                    record_dt = datetime.fromisoformat(sort_date.replace("Z", "+00:00"))
+                    if record_dt < cutoff:
+                        continue
+                except ValueError:
+                    pass
+            results.append(record)
         return results
 
     # ── Scheduling (write) ─────────────────────────────────────
@@ -140,6 +153,18 @@ class PCOClient:
     def get_person(self, person_id: str) -> dict:
         result = self.pco.get(f"/services/v2/people/{person_id}")
         return result["data"]
+
+
+def _normalize_status(raw: str) -> str:
+    """Normalize PCO status strings to a consistent lowercase form."""
+    s = raw.strip().lower()
+    if s in ("c", "confirmed"):
+        return "confirmed"
+    if s in ("d", "declined"):
+        return "declined"
+    if s in ("u", "unconfirmed", "pending"):
+        return "pending"
+    return s
 
 
 # ── Helpers ────────────────────────────────────────────────────
@@ -223,10 +248,10 @@ def cmd_who_serving(client: PCOClient, st_id: str = None):
     for tm in members:
         a = tm["attributes"]
         entry = f"  {a.get('name', '?'):25s}  {a.get('team_position_name', '?')}"
-        status = a.get("status", "")
-        if status in ("C", "confirmed", "Confirmed"):
+        status = _normalize_status(a.get("status", ""))
+        if status == "confirmed":
             confirmed.append(entry)
-        elif status in ("D", "declined", "Declined"):
+        elif status == "declined":
             declined.append(entry)
         else:
             pending.append(entry)
@@ -264,7 +289,7 @@ def cmd_not_responded(client: PCOClient, st_id: str = None):
     for tm in members:
         a = tm["attributes"]
         status = a.get("status", "")
-        if status not in ("C", "confirmed", "Confirmed", "D", "declined", "Declined"):
+        if _normalize_status(status) not in ("confirmed", "declined"):
             pending.append(a)
 
     if not pending:
@@ -316,7 +341,6 @@ def cmd_who_available(client: PCOClient, team_id: str, st_id: str = None):
                     starts = ba.get("starts_at", "")
                     ends = ba.get("ends_at", "")
                     if starts and ends:
-                        from datetime import date as d
                         s = datetime.fromisoformat(starts.replace("Z", "+00:00")).date()
                         e = datetime.fromisoformat(ends.replace("Z", "+00:00")).date()
                         pd = datetime.strptime(plan_date, "%Y-%m-%d").date()
@@ -367,7 +391,7 @@ def cmd_last_served(client: PCOClient, name_query: str):
         for s in schedules:
             a = s.get("attributes", {})
             status = a.get("status", "")
-            if status in ("C", "confirmed", "Confirmed"):
+            if _normalize_status(status) == "confirmed":
                 count += 1
                 sd = a.get("sort_date", a.get("created_at", ""))
                 if sd and (latest is None or sd > latest):
@@ -401,7 +425,7 @@ def cmd_volunteer_report(client: PCOClient, st_id: str = None):
             latest = None
             for s in schedules:
                 a = s.get("attributes", {})
-                if a.get("status") in ("C", "confirmed", "Confirmed"):
+                if _normalize_status(a.get("status", "")) == "confirmed":
                     count += 1
                     sd = a.get("sort_date", a.get("created_at", ""))
                     if sd and (latest is None or sd > latest):

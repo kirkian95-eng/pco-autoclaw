@@ -46,24 +46,19 @@ Scans upcoming services for unfilled positions, ranks eligible volunteers by fai
 
 ## Usage
 
-### Scan for unfilled positions (dry run)
-```bash
-python3 scheduler.py --dry-run
-```
+All commands go through `pco.sh`:
 
-### Schedule volunteers
 ```bash
-python3 scheduler.py
-```
-
-### Poll for declines
-```bash
-python3 poller.py
-```
-
-### Morning summary
-```bash
-python3 poller.py --summary
+./pco.sh who-serving              # Who's on the next service
+./pco.sh not-responded            # Who hasn't accepted/declined
+./pco.sh last-served "John"       # When did John last serve
+./pco.sh volunteer-report         # Fairness report (sorted by least served)
+./pco.sh needs                    # Dry run — show unfilled positions + candidates
+./pco.sh schedule                 # Live schedule (fills unfilled positions)
+./pco.sh poll                     # Check for declines, recommend replacements
+./pco.sh approve                  # Approve pending replacements
+./pco.sh summary                  # Morning summary
+./pco.sh help                     # Full command list
 ```
 
 ## Configuration
