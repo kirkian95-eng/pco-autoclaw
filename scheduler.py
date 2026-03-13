@@ -11,7 +11,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from pco_client import PCOClient
+from pco_client import PCOClient, normalize_status  # noqa: F401 — re-exported for poller.py
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "config.env"))
 
@@ -19,18 +19,6 @@ DATA_DIR = Path(__file__).parent / "data"
 LOG_FILE = DATA_DIR / "schedule_log.jsonl"
 STATUS_FILE = Path("/tmp/pco-scheduler-status.json")
 SEND_TELEGRAM = Path(os.path.expanduser("~/.local/bin/send-telegram.sh"))
-
-
-def normalize_status(raw: str) -> str:
-    """Normalize PCO status strings to a consistent lowercase form."""
-    s = raw.strip().lower()
-    if s in ("c", "confirmed"):
-        return "confirmed"
-    if s in ("d", "declined"):
-        return "declined"
-    if s in ("u", "unconfirmed", "pending"):
-        return "pending"
-    return s
 
 
 @dataclass
@@ -252,7 +240,7 @@ class VolunteerScheduler:
                   f"{candidate.days_since} days ago)")
         else:
             # Check idempotency using pre-fetched data when available
-            if existing_person_ids and candidate.person_id in existing_person_ids:
+            if existing_person_ids is not None and candidate.person_id in existing_person_ids:
                 action["result"] = "already_scheduled"
                 print(f"  [SKIP] {candidate.name} already scheduled for this position")
                 return action

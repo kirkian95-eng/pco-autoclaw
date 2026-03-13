@@ -145,7 +145,7 @@ def poll_for_declines():
                         team_name="",
                         position_name=position,
                     )
-                    candidates = scheduler.build_eligibility_list(need)
+                    candidates, _ = scheduler.build_eligibility_list(need)
 
                     if candidates:
                         best = candidates[0]

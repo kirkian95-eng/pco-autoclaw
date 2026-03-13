@@ -167,6 +167,10 @@ def _normalize_status(raw: str) -> str:
     return s
 
 
+# Public alias for use by other modules
+normalize_status = _normalize_status
+
+
 # ── Helpers ────────────────────────────────────────────────────
 
 def _get_default_st_id() -> str:
