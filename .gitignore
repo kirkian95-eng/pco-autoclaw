@@ -1,4 +1,5 @@
 config.env
+church.yaml
 .env
 data/
 __pycache__/
@@ -9,6 +10,13 @@ __pycache__/
 google-oauth-client-secret.json
 google-oauth-token.json
 google-service-account.json
+
+# Transcription working files
+transcribe/manifest.json
+transcribe/audio/
+transcribe/transcripts/
+transcribe/*.log
+node_modules/
 
 # Scratch scripts (one-off exploration, not part of the product)
 check_*.py

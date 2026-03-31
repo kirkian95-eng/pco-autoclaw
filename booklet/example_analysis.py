@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -18,24 +19,27 @@ class ExampleDoc:
     doc_id: str
 
 
-EXAMPLE_DOCS = [
-    ExampleDoc("advent", "Advent 1", "1jPWRPjiwzjGJgWS_dV2s2ruefhhYh6p1N3mNu5bUHyA"),
-    ExampleDoc("advent", "Advent 2", "1xATECT-GOFufM0uot9EPAWMmyyn-eadfY8rvW6DVmXY"),
-    ExampleDoc("advent", "Advent 3", "1TW1LFjJAI9BLp7TXE-BNv5m5M3RI2FHW8sK0AhKKjhE"),
-    ExampleDoc("advent", "Advent 4", "1tkwgm9x7lzaYbMI1lA5RliOjq2Q-a4JI5SAF7RT1UrM"),
-    ExampleDoc("christmas", "Christmas Eve", "1COu8L5fxP0VlXVcxIHsh7LN7qGcIMCpq-EhQ9OnidHE"),
-    ExampleDoc("christmas", "Christmas 1", "115IhUK-XA7GnqXS4GNPiI8goCC5NWULzO8b_FfdVk0o"),
-    ExampleDoc("christmas", "Christmas 2", "1Soj-vXb1K9nQDbgO7ew1qN0A-MfKVAK3ohUhLiozOcM"),
-    ExampleDoc("epiphany", "Epiphany 1", "1qEWSzAdIgZkwcZvGW8_Q0h4QGvDt4hFt9E1xyCkh7eg"),
-    ExampleDoc("epiphany", "Epiphany 4", "1KwZ5xsuvUWTor23EDh71ZB5UP5xJcjc5KYxWJ6PpToI"),
-    ExampleDoc("lent", "Lent 1", "1ptlpqtDCUf6PhwJAFEw502BcnM4U72zhx-LF1kjzk9s"),
-    ExampleDoc("lent", "Lent 3", "1jn0b_D9vfOTpTXBS1JPjQ-EdRmwIPUFEAtoJfwGCmjI"),
-    ExampleDoc("lent", "Lent 4 alt", "1_n_KxQlnB0hFW0SxIAAHUpgfK7zjm7AM1q8ZW9kzuiY"),
-    ExampleDoc("lent", "Lent 5", "1T4Cxhpk6_AGy1vdDTWR-a99MmhdBG7EnGtv3FWZYEoE"),
-    ExampleDoc("palm_sunday", "Palm Sunday", "1bOjQ-xiYkfrYFUEQpj0QCO7H-7O6HcTew0n58TAR0ko"),
-    ExampleDoc("ordinary_time", "Ordinary Time 7/27/25", "1nKN2MYUzcUsZ_BlM57DUyl-NyrwgZQ_WwwhAgHDHmiA"),
-    ExampleDoc("ordinary_time", "Ordinary Time 11/16/25", "1sCssNpKT-vcKW3eG4AyydRkdeh3y2YYN7sFtnfxh4Eo"),
-]
+def _load_example_docs() -> list[ExampleDoc]:
+    """Load example docs from BOOKLET_EXAMPLE_DOCS env var.
+
+    Format: comma-separated "family|label|doc_id" triples.
+    Example: "advent|Advent 1|1jPW...,lent|Lent 1|1ptl..."
+
+    Returns empty list if not configured (corpus analysis will be skipped).
+    """
+    raw = os.environ.get("BOOKLET_EXAMPLE_DOCS", "")
+    if not raw.strip():
+        return []
+    docs = []
+    for entry in raw.split(","):
+        entry = entry.strip()
+        parts = entry.split("|")
+        if len(parts) == 3:
+            docs.append(ExampleDoc(parts[0].strip(), parts[1].strip(), parts[2].strip()))
+    return docs
+
+
+EXAMPLE_DOCS = _load_example_docs()
 
 SIGNIFICANT_STYLES = {"TITLE", "SUBTITLE", "HEADING_1", "HEADING_2", "HEADING_3", "HEADING_4", "HEADING_5"}
 TIME_RE = re.compile(r"\b\d{1,2}:\d{2}\s*(?:AM|PM|am|pm)?\b")

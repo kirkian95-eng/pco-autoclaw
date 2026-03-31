@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Generate event announcement graphics for St. Luke Anglican Church.
+"""Generate 1080x1080 event announcement graphics for churches.
+
+Reads CHURCH_NAME and CHURCH_LOGO_PATH from config.env (or environment).
+Replace logo_white.png with your own logo.
 
 Usage:
     python3 generate_event_graphic.py \
         --name "Men's Coffee" \
         --date "Friday, March 27" \
         --time "7:30 AM" \
-        --location "Westside Coffee" \
-        --address "4711 Westside Drive, Dallas, TX 75209" \
+        --location "Fellowship Hall" \
         --output /tmp/event.png
 """
 
@@ -37,7 +39,7 @@ FONT_DIR = os.path.expanduser("~/.local/share/fonts")
 FONT_SERIF = os.path.join(FONT_DIR, "PlayfairDisplay.ttf")
 FONT_SERIF_ITALIC = os.path.join(FONT_DIR, "PlayfairDisplay-Italic.ttf")
 FONT_SANS = os.path.join(FONT_DIR, "Outfit.ttf")
-LOGO_PATH = os.path.join(SCRIPT_DIR, "logo_white.png")
+LOGO_PATH = os.environ.get("CHURCH_LOGO_PATH", os.path.join(SCRIPT_DIR, "logo_white.png"))
 
 PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY", "")
 
@@ -250,7 +252,7 @@ def _render_content(draw, img, args, bg):
     subtitle_f = font(FONT_SERIF_ITALIC, 38, weight=400) if args.subtitle else None
 
     # --- Measure ---
-    church_text = "St. Luke Anglican Church"
+    church_text = os.environ.get("CHURCH_NAME", "Your Church")
     church_h = measure(draw, church_text, church_f)[1]
 
     title_lines, title_f, title_line_h, title_block_h = fit_title(draw, args.name)
@@ -340,11 +342,11 @@ def _render_content(draw, img, args, bg):
 
 
 def main():
-    p = argparse.ArgumentParser(description="Generate St. Luke event graphic")
+    p = argparse.ArgumentParser(description="Generate church event graphic")
     p.add_argument("--name", required=True, help="Headline text (event name or announcement title)")
-    p.add_argument("--date", required=True, help="First info line, e.g. 'Friday, March 27' or 'Order by March 30'")
-    p.add_argument("--time", default="", help="Second info line, e.g. '7:30 AM' or 'Email kim@stlukemd.org' (optional)")
-    p.add_argument("--location", required=True, help="Third info line, e.g. venue name or 'St. Luke Anglican Church'")
+    p.add_argument("--date", required=True, help="First info line, e.g. 'Friday, March 27'")
+    p.add_argument("--time", default="", help="Second info line, e.g. '7:30 AM' (optional)")
+    p.add_argument("--location", required=True, help="Third info line, e.g. venue name or church name")
     p.add_argument("--address", help="Street address (optional)")
     p.add_argument("--subtitle", help="Subtitle below event name (optional)")
     p.add_argument("--color", help="Background hex color override, e.g. '#3d6b4f'")

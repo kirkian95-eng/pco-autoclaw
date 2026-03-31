@@ -2,19 +2,32 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from datetime import date
+import os
 import re
 
 from booklet.models import AssembledService, PassageText, RoleAssignment, SongAssignment
 from booklet.sources.google_docs import DocumentParagraph, TextReplacement
 
 
-KNOWN_NAME_ALIASES = {
-    "JAM": "James",
-    "KT": "Kimberley",
-    "KK": "Kurtley",
-    "MG": "Michael",
-    "SAM": "Sam",
-}
+def _load_name_aliases() -> dict[str, str]:
+    """Load name aliases from NAME_ALIASES env var.
+
+    Format: comma-separated KEY:VALUE pairs, e.g. "JAM:James,KT:Kim,MG:Michael"
+    Used to expand planning worksheet initials to first names in booklets.
+    """
+    raw = os.environ.get("NAME_ALIASES", "")
+    if not raw.strip():
+        return {}
+    aliases = {}
+    for pair in raw.split(","):
+        pair = pair.strip()
+        if ":" in pair:
+            key, val = pair.split(":", 1)
+            aliases[key.strip()] = val.strip()
+    return aliases
+
+
+KNOWN_NAME_ALIASES = _load_name_aliases()
 
 BOOK_NAME_MAP = {
     "Gen": "Genesis",

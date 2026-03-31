@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Decline detection poller — finds declines, recommends replacements, notifies Kirk."""
+"""Decline detection poller — finds declines, recommends replacements, notifies admin."""
 
 import json
 import os
