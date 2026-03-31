@@ -1,0 +1,223 @@
+# ACNA Sunday Calendar Through 2029
+
+Generated for Hildy on 2026-03-30.
+
+Source rules:
+- ACNA 2019 BCP Calendar of the Christian Year
+- ACNA 2019 Leaflet Scriptures Year A, Year B, and Year C
+
+Notes:
+- This list starts with the next Sunday on or after the chosen start date.
+- Labels follow ACNA 2019 naming as closely as possible for Sunday observances.
+- Ordinary Time Sundays after Trinity are listed by ACNA Proper number.
+
+## 2026
+
+- 2026-04-05 - Easter Day
+- 2026-04-12 - Second Sunday of Easter
+- 2026-04-19 - Third Sunday of Easter
+- 2026-04-26 - Fourth Sunday of Easter
+- 2026-05-03 - Fifth Sunday of Easter
+- 2026-05-10 - Sixth Sunday of Easter
+- 2026-05-17 - Sunday after Ascension Day
+- 2026-05-24 - Pentecost
+- 2026-05-31 - Trinity Sunday
+- 2026-06-07 - Proper 5
+- 2026-06-14 - Proper 6
+- 2026-06-21 - Proper 7
+- 2026-06-28 - Proper 8
+- 2026-07-05 - Proper 9
+- 2026-07-12 - Proper 10
+- 2026-07-19 - Proper 11
+- 2026-07-26 - Proper 12
+- 2026-08-02 - Proper 13
+- 2026-08-09 - Proper 14
+- 2026-08-16 - Proper 15
+- 2026-08-23 - Proper 16
+- 2026-08-30 - Proper 17
+- 2026-09-06 - Proper 18
+- 2026-09-13 - Proper 19
+- 2026-09-20 - Proper 20
+- 2026-09-27 - Proper 21
+- 2026-10-04 - Proper 22
+- 2026-10-11 - Proper 23
+- 2026-10-18 - Proper 24
+- 2026-10-25 - Proper 25
+- 2026-11-01 - Proper 26
+- 2026-11-08 - Proper 27
+- 2026-11-15 - Proper 28
+- 2026-11-22 - Proper 29 (Christ the King)
+- 2026-11-29 - First Sunday in Advent
+- 2026-12-06 - Second Sunday in Advent
+- 2026-12-13 - Third Sunday in Advent
+- 2026-12-20 - Fourth Sunday in Advent
+- 2026-12-27 - First Sunday of Christmas
+## 2027
+
+- 2027-01-03 - Second Sunday of Christmas
+- 2027-01-10 - First Sunday of Epiphany (Baptism of Our Lord)
+- 2027-01-17 - Second Sunday of Epiphany
+- 2027-01-24 - Third Sunday of Epiphany
+- 2027-01-31 - World Mission Sunday (2nd to Last Sunday of Epiphany)
+- 2027-02-07 - Last Sunday of Epiphany (Transfiguration)
+- 2027-02-14 - First Sunday in Lent
+- 2027-02-21 - Second Sunday in Lent
+- 2027-02-28 - Third Sunday in Lent
+- 2027-03-07 - Fourth Sunday in Lent
+- 2027-03-14 - Fifth Sunday in Lent
+- 2027-03-21 - Palm Sunday
+- 2027-03-28 - Easter Day
+- 2027-04-04 - Second Sunday of Easter
+- 2027-04-11 - Third Sunday of Easter
+- 2027-04-18 - Fourth Sunday of Easter
+- 2027-04-25 - Fifth Sunday of Easter
+- 2027-05-02 - Sixth Sunday of Easter
+- 2027-05-09 - Sunday after Ascension Day
+- 2027-05-16 - Pentecost
+- 2027-05-23 - Trinity Sunday
+- 2027-05-30 - Proper 4
+- 2027-06-06 - Proper 5
+- 2027-06-13 - Proper 6
+- 2027-06-20 - Proper 7
+- 2027-06-27 - Proper 8
+- 2027-07-04 - Proper 9
+- 2027-07-11 - Proper 10
+- 2027-07-18 - Proper 11
+- 2027-07-25 - Proper 12
+- 2027-08-01 - Proper 13
+- 2027-08-08 - Proper 14
+- 2027-08-15 - Proper 15
+- 2027-08-22 - Proper 16
+- 2027-08-29 - Proper 17
+- 2027-09-05 - Proper 18
+- 2027-09-12 - Proper 19
+- 2027-09-19 - Proper 20
+- 2027-09-26 - Proper 21
+- 2027-10-03 - Proper 22
+- 2027-10-10 - Proper 23
+- 2027-10-17 - Proper 24
+- 2027-10-24 - Proper 25
+- 2027-10-31 - Proper 26
+- 2027-11-07 - Proper 27
+- 2027-11-14 - Proper 28
+- 2027-11-21 - Proper 29 (Christ the King)
+- 2027-11-28 - First Sunday in Advent
+- 2027-12-05 - Second Sunday in Advent
+- 2027-12-12 - Third Sunday in Advent
+- 2027-12-19 - Fourth Sunday in Advent
+- 2027-12-26 - First Sunday of Christmas
+## 2028
+
+- 2028-01-02 - Second Sunday of Christmas
+- 2028-01-09 - First Sunday of Epiphany (Baptism of Our Lord)
+- 2028-01-16 - Second Sunday of Epiphany
+- 2028-01-23 - Third Sunday of Epiphany
+- 2028-01-30 - Fourth Sunday of Epiphany
+- 2028-02-06 - Fifth Sunday of Epiphany
+- 2028-02-13 - Sixth Sunday of Epiphany
+- 2028-02-20 - World Mission Sunday (2nd to Last Sunday of Epiphany)
+- 2028-02-27 - Last Sunday of Epiphany (Transfiguration)
+- 2028-03-05 - First Sunday in Lent
+- 2028-03-12 - Second Sunday in Lent
+- 2028-03-19 - Third Sunday in Lent
+- 2028-03-26 - Fourth Sunday in Lent
+- 2028-04-02 - Fifth Sunday in Lent
+- 2028-04-09 - Palm Sunday
+- 2028-04-16 - Easter Day
+- 2028-04-23 - Second Sunday of Easter
+- 2028-04-30 - Third Sunday of Easter
+- 2028-05-07 - Fourth Sunday of Easter
+- 2028-05-14 - Fifth Sunday of Easter
+- 2028-05-21 - Sixth Sunday of Easter
+- 2028-05-28 - Sunday after Ascension Day
+- 2028-06-04 - Pentecost
+- 2028-06-11 - Trinity Sunday
+- 2028-06-18 - Proper 6
+- 2028-06-25 - Proper 7
+- 2028-07-02 - Proper 8
+- 2028-07-09 - Proper 9
+- 2028-07-16 - Proper 10
+- 2028-07-23 - Proper 11
+- 2028-07-30 - Proper 12
+- 2028-08-06 - Proper 13
+- 2028-08-13 - Proper 14
+- 2028-08-20 - Proper 15
+- 2028-08-27 - Proper 16
+- 2028-09-03 - Proper 17
+- 2028-09-10 - Proper 18
+- 2028-09-17 - Proper 19
+- 2028-09-24 - Proper 20
+- 2028-10-01 - Proper 21
+- 2028-10-08 - Proper 22
+- 2028-10-15 - Proper 23
+- 2028-10-22 - Proper 24
+- 2028-10-29 - Proper 25
+- 2028-11-05 - Proper 26
+- 2028-11-12 - Proper 27
+- 2028-11-19 - Proper 28
+- 2028-11-26 - Proper 29 (Christ the King)
+- 2028-12-03 - First Sunday in Advent
+- 2028-12-10 - Second Sunday in Advent
+- 2028-12-17 - Third Sunday in Advent
+- 2028-12-24 - Fourth Sunday in Advent
+- 2028-12-31 - First Sunday of Christmas
+## 2029
+
+- 2029-01-07 - First Sunday of Epiphany (Baptism of Our Lord)
+- 2029-01-14 - Second Sunday of Epiphany
+- 2029-01-21 - Third Sunday of Epiphany
+- 2029-01-28 - Fourth Sunday of Epiphany
+- 2029-02-04 - World Mission Sunday (2nd to Last Sunday of Epiphany)
+- 2029-02-11 - Last Sunday of Epiphany (Transfiguration)
+- 2029-02-18 - First Sunday in Lent
+- 2029-02-25 - Second Sunday in Lent
+- 2029-03-04 - Third Sunday in Lent
+- 2029-03-11 - Fourth Sunday in Lent
+- 2029-03-18 - Fifth Sunday in Lent
+- 2029-03-25 - Palm Sunday
+- 2029-04-01 - Easter Day
+- 2029-04-08 - Second Sunday of Easter
+- 2029-04-15 - Third Sunday of Easter
+- 2029-04-22 - Fourth Sunday of Easter
+- 2029-04-29 - Fifth Sunday of Easter
+- 2029-05-06 - Sixth Sunday of Easter
+- 2029-05-13 - Sunday after Ascension Day
+- 2029-05-20 - Pentecost
+- 2029-05-27 - Trinity Sunday
+- 2029-06-03 - Proper 4
+- 2029-06-10 - Proper 5
+- 2029-06-17 - Proper 6
+- 2029-06-24 - Proper 7
+- 2029-07-01 - Proper 8
+- 2029-07-08 - Proper 9
+- 2029-07-15 - Proper 10
+- 2029-07-22 - Proper 11
+- 2029-07-29 - Proper 12
+- 2029-08-05 - Proper 13
+- 2029-08-12 - Proper 14
+- 2029-08-19 - Proper 15
+- 2029-08-26 - Proper 16
+- 2029-09-02 - Proper 17
+- 2029-09-09 - Proper 18
+- 2029-09-16 - Proper 19
+- 2029-09-23 - Proper 20
+- 2029-09-30 - Proper 21
+- 2029-10-07 - Proper 22
+- 2029-10-14 - Proper 23
+- 2029-10-21 - Proper 24
+- 2029-10-28 - Proper 25
+- 2029-11-04 - Proper 26
+- 2029-11-11 - Proper 27
+- 2029-11-18 - Proper 28
+- 2029-11-25 - Proper 29 (Christ the King)
+- 2029-12-02 - First Sunday in Advent
+- 2029-12-09 - Second Sunday in Advent
+- 2029-12-16 - Third Sunday in Advent
+- 2029-12-23 - Fourth Sunday in Advent
+- 2029-12-30 - First Sunday of Christmas
+
+Sources:
+- https://bcp2019.anglicanchurch.net/wp-content/uploads/2019/08/57-Calendar-of-the-Christian-Year.pdf
+- https://bcp2019.anglicanchurch.net/index.php/leaflet-scriptures-year-a/
+- https://bcp2019.anglicanchurch.net/index.php/leaflet-scriptures-year-b/
+- https://bcp2019.anglicanchurch.net/index.php/leaflet-scriptures-year-c/

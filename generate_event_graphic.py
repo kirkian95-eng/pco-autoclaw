@@ -12,9 +12,13 @@ Usage:
 """
 
 import argparse
-import random
 import os
+import random
 import tempfile
+
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.env"))
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
 # --- Constants ---
@@ -35,7 +39,7 @@ FONT_SERIF_ITALIC = os.path.join(FONT_DIR, "PlayfairDisplay-Italic.ttf")
 FONT_SANS = os.path.join(FONT_DIR, "Outfit.ttf")
 LOGO_PATH = os.path.join(SCRIPT_DIR, "logo_white.png")
 
-PEXELS_API_KEY = "94TlRoIxPVYrRnwGqv7EJTANCRTwd5dKblQE6ZGYEV5QWmxfz5rmo2YX"
+PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY", "")
 
 WIDTH = 1080
 HEIGHT = 1080

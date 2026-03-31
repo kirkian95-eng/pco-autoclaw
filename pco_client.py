@@ -4,8 +4,10 @@
 import os
 import sys
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import pypco
+import requests
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "config.env"))
@@ -154,6 +156,94 @@ class PCOClient:
         result = self.pco.get(f"/services/v2/people/{person_id}")
         return result["data"]
 
+    # ── Plan Attachments (write) ──────────────────────────────
+
+    def list_plan_attachments(self, service_type_id: str, plan_id: str) -> list[dict]:
+        results = []
+        for item in self.pco.iterate(
+            f"/services/v2/service_types/{service_type_id}/plans/{plan_id}/attachments"
+        ):
+            results.append(item["data"])
+        return results
+
+    def upload_file(self, file_path: str | Path) -> str:
+        file_path = Path(file_path)
+        with file_path.open("rb") as fh:
+            response = self._raw_request(
+                "POST",
+                "https://upload.planningcenteronline.com/v2/files",
+                files={"file": (file_path.name, fh, _content_type_for_suffix(file_path.suffix))},
+            )
+        payload = response.json()
+        return payload["data"][0]["id"]
+
+    def create_plan_attachment(
+        self,
+        service_type_id: str,
+        plan_id: str,
+        file_upload_identifier: str,
+        filename: str,
+    ) -> dict:
+        response = self._raw_request(
+            "POST",
+            f"https://api.planningcenteronline.com/services/v2/service_types/{service_type_id}/plans/{plan_id}/attachments",
+            json={
+                "data": {
+                    "type": "Attachment",
+                    "attributes": {
+                        "file_upload_identifier": file_upload_identifier,
+                        "filename": filename,
+                    },
+                }
+            },
+        )
+        return response.json()["data"]
+
+    def delete_plan_attachment(self, service_type_id: str, plan_id: str, attachment_id: str) -> None:
+        self._raw_request(
+            "DELETE",
+            f"https://api.planningcenteronline.com/services/v2/service_types/{service_type_id}/plans/{plan_id}/attachments/{attachment_id}",
+        )
+
+    def replace_plan_attachment(
+        self,
+        service_type_id: str,
+        plan_id: str,
+        file_path: str | Path,
+        filename: str | None = None,
+    ) -> dict:
+        file_path = Path(file_path)
+        desired_name = filename or file_path.name
+        for attachment in self.list_plan_attachments(service_type_id, plan_id):
+            attrs = attachment.get("attributes") or {}
+            existing_name = attrs.get("filename") or attrs.get("display_name")
+            if existing_name == desired_name:
+                self.delete_plan_attachment(service_type_id, plan_id, attachment["id"])
+        upload_id = self.upload_file(file_path)
+        return self.create_plan_attachment(
+            service_type_id=service_type_id,
+            plan_id=plan_id,
+            file_upload_identifier=upload_id,
+            filename=desired_name,
+        )
+
+    def _raw_request(self, method: str, url: str, **kwargs) -> requests.Response:
+        headers = {
+            "User-Agent": "openclaw",
+            "Authorization": self.pco._auth_header,
+        }
+        if "json" in kwargs:
+            headers["Content-Type"] = "application/json"
+        response = self.pco.session.request(
+            method,
+            url,
+            headers=headers,
+            timeout=120,
+            **kwargs,
+        )
+        response.raise_for_status()
+        return response
+
 
 def _normalize_status(raw: str) -> str:
     """Normalize PCO status strings to a consistent lowercase form."""
@@ -185,6 +275,12 @@ def _get_default_st_id() -> str:
 def _get_next_plan(client: PCOClient, st_id: str) -> dict | None:
     plans = client.get_upcoming_plans(st_id, 21)
     return plans[0] if plans else None
+def _content_type_for_suffix(suffix: str) -> str:
+    if suffix.lower() == ".pdf":
+        return "application/pdf"
+    if suffix.lower() == ".txt":
+        return "text/plain"
+    return "application/octet-stream"
 
 
 # ── CLI discovery commands ─────────────────────────────────────

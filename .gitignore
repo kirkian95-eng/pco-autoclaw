@@ -1,6 +1,19 @@
 config.env
+.env
 data/
 __pycache__/
 *.pyc
 *.pyo
-.env
+
+# Google credential files
+google-oauth-client-secret.json
+google-oauth-token.json
+google-service-account.json
+
+# Scratch scripts (one-off exploration, not part of the product)
+check_*.py
+list_*.py
+search_*.py
+read_*.py
+get_*.py
+move_*.py

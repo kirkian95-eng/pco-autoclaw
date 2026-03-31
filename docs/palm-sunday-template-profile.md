@@ -1,0 +1,97 @@
+# Palm Sunday Template Profile
+
+- Source doc: `Palm Sunday 3/29/2026`
+- Doc ID: `1bOjQ-xiYkfrYFUEQpj0QCO7H-7O6HcTew0n58TAR0ko`
+- Source type: `Most recent live doc`
+- Provisional: `True`
+
+## Title Lines
+- `TITLE` `CENTER`: Palm Sunday
+- `TITLE` `CENTER`: 10:30 AM Sunday,
+- `TITLE` `CENTER`: LITURGY OF THE PALMS, PASSION READING & EUCHARIST
+
+## Front Matter
+- `NORMAL_TEXT` `CENTER`: Officiant: Kimberley Pfeiler
+- `NORMAL_TEXT` `CENTER`: Preacher: James Madden
+- `NORMAL_TEXT` `CENTER`: Worship Leader: Michael Gomez
+- `HEADING_2` `None`: Prep:
+- `HEADING_2` `None`: Outdoor table for people to pick up palms. Procession should bring palms to the altar. Distribute palm crosses during communion.
+- `HEADING_2` `None`: Clergy will be vested. Liturgical color is red.
+- `HEADING_2` `None`: Will need printed bulletins, at least for the procession.
+- `NORMAL_TEXT` `None`: Special volunteers needed
+- `NORMAL_TEXT` `None`: Michael will lead musicians onstage. Kirk will lead the singing outside, and process in with the congregation.
+
+## Sections
+- `service_title` heading `Palm Sunday` range `14:33`
+  - `TITLE`: 10:30 AM Sunday,
+- `liturgy_of_the_palms_passion_reading_and_eucharist` heading `LITURGY OF THE PALMS, PASSION READING & EUCHARIST` range `83:166`
+  - `NORMAL_TEXT`: Officiant: Kimberley Pfeiler
+  - `NORMAL_TEXT`: Preacher: James Madden
+  - `NORMAL_TEXT`: Worship Leader: Michael Gomez
+- `prep` heading `Prep:` range `173:173`
+- `procession` heading `Outdoor table for people to pick up palms. Procession should bring palms to the altar. Distribute palm crosses during communion.` range `302:350`
+  - `HEADING_2`: Clergy will be vested. Liturgical color is red.
+- `procession` heading `Will need printed bulletins, at least for the procession.` range `408:617`
+  - `NORMAL_TEXT`: Special volunteers needed
+  - `NORMAL_TEXT`: Michael will lead musicians onstage. Kirk will lead the singing outside, and process in with the congregation.
+- `welcome` heading `Welcome (James) 10:25 AM Outside` range `650:1014`
+  - `HEADING_2`: *Preset: 15*
+  - `NORMAL_TEXT`: Turn on Officiant microphone
+  - `NORMAL_TEXT`: 10:15 am: Worship team prayer.
+- `gathering_of_the_community` heading `The Gathering of the Community 10:30 (James)` range `1060:1099`
+  - `HEADING_2`: *Preset: 15*
+  - `NORMAL_TEXT`: Officiant: “Please stand”
+- `remaining_outside` heading `Remaining outside` range `1117:2135`
+  - `NORMAL_TEXT`: Celebrant: Hosanna to the Son of David, the King of Israel!
+  - `NORMAL_TEXT`: All: Blessed is he who comes in the Name of the Lord. Hosanna in the highest.
+  - `NORMAL_TEXT`: Celebrant: Dear friends in Christ, during Lent we have been preparing for the celebration of our Lord’s paschal mystery. On this day our Lor
+- `palm_gospel` heading `The Palm Gospel (Reader 1): Jeff` range `2168:2168`
+- `remaining_outside` heading `Remaining outside` range `2186:3658`
+  - `NORMAL_TEXT`: Reader 1: The Holy Gospel according Mark, chapter eleven.
+  - `NORMAL_TEXT`: (Sign of the cross on forehead, lips and heart, using thumb)
+  - `NORMAL_TEXT`: All: Glory to you, Lord Christ.
+- `remaining_outside` heading `Remaining outside` range `3676:5175`
+  - `NORMAL_TEXT`: Celebrant: Bless the Palms and the Palm Crosses.
+  - `NORMAL_TEXT`: Celebrant: The Lord be with you.
+  - `NORMAL_TEXT`: All: And also with you.
+- `childrens_dismissal` heading `Children’s Dismissal (James)` range `5204:5521`
+  - `NORMAL_TEXT`: *Preset: 15*
+  - `NORMAL_TEXT`: Officiant: Almighty God, we thank you for the gift of our children and for the sacred story they go to explore in Children’s Chapel. Open th
+  - `NORMAL_TEXT`: See you soon!
+- `the_psalm_reading` heading `The Psalm Reading (Allison)` range `5549:12828`
+  - `HEADING_4`: *Preset: 10*
+  - `NORMAL_TEXT`: Mute Officiant microphone
+  - `NORMAL_TEXT`: Mute Celebrant microphone
+- `sermon` heading `Homily (James)` range `12843:12954`
+  - `HEADING_2`: *Preset: 9*
+  - `NORMAL_TEXT`: Sermon slides, if any
+  - `NORMAL_TEXT`: Mute Worship Team
+- `affirmation_of_faith` heading `The Affirmation of Faith (James)` range `12987:13843`
+  - `HEADING_2`: *Preset: 9*
+  - `NORMAL_TEXT`: Officiant: Please stand as we affirm our faith through the words of the Apostle’s Creed.
+  - `NORMAL_TEXT`: Officiant: Do you believe in God the Father?
+- `prayers_of_the_people` heading `The Prayers of the People (Sam)` range `13875:17278`
+  - `HEADING_2`: *Preset: 9*
+  - `NORMAL_TEXT`: Officiant: Please be seated
+  - `NORMAL_TEXT`: Mute Officiant microphone
+- `summary_of_the_law` heading `The Summary of the Law (Officiant)` range `17313:19032`
+  - `HEADING_2`: *Preset: 9*
+  - `NORMAL_TEXT`: Unmute Officiant microphone
+  - `NORMAL_TEXT`: Officiant: Hear the teaching of Christ, whose primary care is the orientation of our hearts:
+- `peace` heading `The Peace (Officiant)` range `19054:19287`
+  - `HEADING_2`: *Preset: 9*
+  - `NORMAL_TEXT`: Unmute Officiant microphone
+  - `NORMAL_TEXT`: All standing, the presiding priest says to the People
+- `announcements` heading `Announcements (Officiant)` range `19313:19387`
+  - `HEADING_2`: *Preset: 15*
+  - `NORMAL_TEXT`: Good Friday/Easter (rolled up announcement)
+  - `NORMAL_TEXT`: Easter Lilies
+- `offering` heading `Offering (Officiant)` range `19408:19912`
+  - `HEADING_2`: *Preset: 9*
+  - `NORMAL_TEXT`: Unmute Officiant microphone
+  - `NORMAL_TEXT`: Officiant: *Invite the Offering!*
+- `doxology` heading `Doxology (Worship Team)` range `19936:26242`
+  - `NORMAL_TEXT`: *Preset: 10*
+  - `NORMAL_TEXT`: Worship Team: Please stand.
+  - `NORMAL_TEXT`: The Great Thanksgiving (Celebrant)
+
