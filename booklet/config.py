@@ -72,7 +72,7 @@ def load_config() -> BookletConfig:
         repo_root=REPO_ROOT,
         data_dir=data_dir,
         manifest_db=manifest_db,
-        default_service_type_id=os.getenv("BOOKLET_SERVICE_TYPE_ID", "1219410"),
+        default_service_type_id=os.getenv("BOOKLET_SERVICE_TYPE_ID", ""),
         planning_workbook_file=planning_workbook_file,
         google_service_account_file=Path(google_service_account)
         if google_service_account

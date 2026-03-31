@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
@@ -22,12 +23,18 @@ KEYWORDS = [
     "Reading Program",
     "Pentecost",
     "Easter",
-    "Kingdom of Dallas",
     "Passion Sunday",
     "Transfiguration",
     "World Mission Sunday",
     "Holy Week",
 ]
+
+# Churches can add extra corpus search keywords via BOOKLET_EXTRA_KEYWORDS env var
+# (comma-separated). Example: "Kingdom of Dallas,Healing Service"
+_extra = os.environ.get("BOOKLET_EXTRA_KEYWORDS", "")
+if _extra.strip():
+    KEYWORDS.extend(k.strip() for k in _extra.split(",") if k.strip())
+
 NOISE_TOKENS = {
     "ordinary",
     "time",
@@ -43,7 +50,6 @@ NOISE_TOKENS = {
     "program",
     "kingdom",
     "of",
-    "dallas",
     "holy",
     "week",
     "proper",
@@ -144,7 +150,7 @@ def analyze_corpus_rules(config: BookletConfig) -> str:
     lines.append("- Treat sections present in at least 75% of a family as required managed blocks.")
     lines.append("- Treat sections present in 30%-74% of a family as optional family blocks.")
     lines.append("- Preserve logistics and production cues as human-authored unless they are explicitly marked for management.")
-    lines.append("- Use title keywords and special-case markers like `alternative liturgy`, `kingdom of dallas`, `inclement weather`, and `world mission sunday` as variant flags layered on top of the base family.")
+    lines.append("- Use title keywords and special-case markers like `alternative liturgy`, `inclement weather`, and `world mission sunday` as variant flags layered on top of the base family.")
     lines.append("- Palm Sunday and Passion/Holy Week style liturgies should not inherit directly from ordinary-time order.")
     lines.append("")
     return "\n".join(lines)
@@ -218,16 +224,19 @@ def classify_family(name: str) -> tuple[str, tuple[str, ...]]:
     else:
         family = "special"
 
-    for marker in [
+    _variant_markers = [
         "alternative liturgy",
-        "kingdom of dallas",
         "inclement weather",
         "world mission sunday",
         "incarnation sunday",
         "transfiguration",
         "morning prayer",
         "proper",
-    ]:
+    ]
+    _extra_variants = os.environ.get("BOOKLET_EXTRA_VARIANT_MARKERS", "")
+    if _extra_variants.strip():
+        _variant_markers.extend(v.strip().lower() for v in _extra_variants.split(",") if v.strip())
+    for marker in _variant_markers:
         if marker in lowered:
             variants.append(marker.replace(" ", "_"))
     return family, tuple(variants)

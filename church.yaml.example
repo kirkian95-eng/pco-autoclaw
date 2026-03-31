@@ -1,0 +1,57 @@
+# Church-specific configuration
+# Copy this to church.yaml and fill in your details.
+# These values are loaded by setup.sh into config.env.
+
+# ── Identity ──────────────────────────────────────────────────────────
+church_name: "Your Church Name"
+church_logo_path: "logo_white.png"  # Path to your logo (white on transparent PNG)
+
+# ── Planning Center ───────────────────────────────────────────────────
+# Get a Personal Access Token at:
+# https://api.planningcenteronline.com/oauth/applications
+pco_app_id: ""
+pco_secret: ""
+
+# Service type IDs (find with: python3 pco_client.py list-service-types)
+# The main weekly worship service type:
+booklet_service_type_id: ""
+
+# ── Google Workspace (for booklet generation) ─────────────────────────
+# Option 1: Service account (recommended for headless servers)
+google_service_account_file: ""
+
+# Option 2: OAuth (use when service account can't access shared drives)
+google_oauth_client_secret_file: ""
+google_oauth_token_file: ""
+
+# Google Drive folder IDs
+google_template_root_id: ""   # Folder containing pristine template docs
+google_output_root_id: ""     # Folder for generated booklets
+
+# Template doc IDs (one per liturgical family)
+ordinary_template_doc_id: ""  # Ordinary time after Pentecost
+
+# ── APIs ──────────────────────────────────────────────────────────────
+# Crossway ESV API: https://api.esv.org/
+esv_api_token: ""
+
+# Pexels (stock photos for event graphics): https://www.pexels.com/api/
+pexels_api_key: ""
+
+# ── Booklet Customization ────────────────────────────────────────────
+# Name aliases: map planning worksheet initials to first names
+# Format: comma-separated KEY:VALUE pairs
+name_aliases: ""  # e.g. "JAM:James,KT:Kim,MG:Michael"
+
+# Extra corpus keywords for your church (comma-separated)
+extra_keywords: ""  # e.g. "Kingdom of Dallas,Healing Service"
+
+# Extra variant markers (comma-separated, lowercase)
+extra_variant_markers: ""  # e.g. "kingdom of dallas,healing liturgy"
+
+# ── Sermon Transcription ──────────────────────────────────────────────
+# Subsplash app key (find in any embed URL: subsplash.com/u/-APPKEY/...)
+subsplash_app_key: ""
+
+# Whisper model size: tiny, base, small, medium, large
+whisper_model: "base"
